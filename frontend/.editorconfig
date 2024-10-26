@@ -3,7 +3,11 @@ root = true
 
 [*]
 indent_style = space
+<<<<<<< HEAD
 indent_size = 2
+=======
+indent_size = 4
+>>>>>>> 67cc81a (added editorconfig file)
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
