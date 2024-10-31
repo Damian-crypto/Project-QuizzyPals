@@ -28,6 +28,7 @@ const RoomLobbyPage = () => {
     "Player 3",
   ]);
 
+<<<<<<< HEAD
   const requestHeaders = {
     headers: {
       Authorization: `Bearer ${user.userJWT}`,
@@ -59,6 +60,18 @@ const RoomLobbyPage = () => {
   const handleStartGameButton = async (e) => {
     const gameData = {
       userId: user.userId,
+=======
+  const handleStartGameButton = async (e) => {
+    const requestHeaders = {
+      headers: {
+        Authorization: `Bearer ${user.userJWT}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const gameData = {
+      userId: "67239ece1548044649dcf042",
+>>>>>>> cbb3a87 (quiz creation implementation is in progress)
       durationHours: 0,
       durationMinutes: 10,
     };
@@ -70,7 +83,11 @@ const RoomLobbyPage = () => {
         requestHeaders
       )
       .then((response) => {
+<<<<<<< HEAD
         if (response.status === 200) {
+=======
+        if (response.status == 200) {
+>>>>>>> cbb3a87 (quiz creation implementation is in progress)
           console.log(response.data);
           if (response.data.message == "Game started") {
             navigate("/createquiz");
@@ -79,7 +96,11 @@ const RoomLobbyPage = () => {
       })
       .catch((error) => {
         console.log(error.response.data);
+<<<<<<< HEAD
         setError(error.response.data.message);
+=======
+        setError(error.response.data);
+>>>>>>> cbb3a87 (quiz creation implementation is in progress)
       });
   };
 
@@ -99,7 +120,15 @@ const RoomLobbyPage = () => {
           <div className="start-btn">
             <ButtonComponent
               label={"Start Game"}
+<<<<<<< HEAD
               onClick={handleStartGameButton}
+=======
+<<<<<<< HEAD
+              onClick={() => navigate("/createquiz")}
+=======
+              onClick={handleStartGameButton}
+>>>>>>> aedef33 (quiz creation implementation is in progress)
+>>>>>>> cbb3a87 (quiz creation implementation is in progress)
             />
           </div>
           {error && <div className="error-message">{error}</div>}
