@@ -1,11 +1,7 @@
 {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-<<<<<<< HEAD
     "editor.tabSize": 2,
-=======
-    "editor.tabSize": 4,
->>>>>>> 67cc81a (added editorconfig file)
     "editor.insertSpaces": true,
     "editor.detectIndentation": true,
     "[javascript]": {
