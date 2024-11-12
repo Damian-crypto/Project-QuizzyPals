@@ -44,7 +44,7 @@ const WelcomePage = () => {
         }
       }
     } catch (error) {
-      setError(error.response.data);
+      setError({ message: error.response.data.message });
       console.log(error.response.data);
     }
   };

@@ -15,9 +15,14 @@ import { useNavigate } from "react-router-dom";
 import { useRoomContext } from "../hook/useRoomContext";
 import { useEffect } from "react";
 import { useAuthContext } from "../hook/useAuthContext";
+import { useGameContext } from "../hook/useGameContext";
 
 const RoomLobbyPage = () => {
   const navigate = useNavigate();
+  const { socket } = useGameContext();
+
+  console.log(socket);
+
   const [error, setError] = useState(null);
   const { room } = useRoomContext();
   const { user } = useAuthContext();
@@ -73,25 +78,63 @@ const RoomLobbyPage = () => {
         if (response.status === 200) {
           console.log(response.data);
           if (response.data.message == "Game started") {
+            const start = new Date();
+            const end = new Date();
+            end.setHours(start.getHours() + gameData.durationHours);
+            end.setMinutes(start.getMinutes() + gameData.durationMinutes);
+
+            const startGameRequest = {
+              type: "GAME_START",
+              host: user.userId,
+              roomId: room.roomId,
+              startTime: start,
+              endTime: end,
+            };
+
+            socket.current.send(JSON.stringify(startGameRequest));
             navigate("/createquiz");
           }
         }
       })
       .catch((error) => {
-        console.log(error.response.data);
-        setError(error.response.data.message);
+        if (error) {
+          if (error.response) {
+            if (error.response.data) {
+              if (error.response.data.message) {
+                console.log(error.response.data.message);
+                setError(error.response.data.message);
+              } else {
+                console.log(error.response.data);
+                setError(error.response.data);
+              }
+            } else {
+              console.log(error.response);
+            }
+          } else {
+            console.log(error);
+          }
+        }
       });
   };
 
   useEffect(() => {
+    if (!socket) return;
+
+    socket.current.onmessage = (msg) => {
+      console.log("Received", msg);
+    };
+  });
+
+  useEffect(() => {
     if (!room) {
       navigate("/");
+      return;
     }
 
     getAndSetRoomPlayers(room.roomId);
   }, []);
 
-  return (
+  return room ? (
     <Grid container columns={16}>
       <Grid size={8}>
         <div className="header-container">
@@ -135,6 +178,8 @@ const RoomLobbyPage = () => {
         </div>
       </Grid>
     </Grid>
+  ) : (
+    <>Room context destroyed in client side</>
   );
 };
 
