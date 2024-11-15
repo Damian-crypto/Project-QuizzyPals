@@ -36,7 +36,8 @@ const startGame = async (req, res) => {
     }
 
     if (room.gameStart && room.gameEnd && room.gameEnd >= Date.now()) {
-      throw Error(`A game is already running in this room: ${room.roomId}`);
+      res.status(StatusCodes.OK).json({ message: "Game already running" });
+      return;
     }
 
     if (isNaN(durationHours) || isNaN(durationMinutes)) {
@@ -116,9 +117,7 @@ const createQuiz = async (req, res) => {
 
     res.status(StatusCodes.OK).json(quiz);
   } catch (error) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: error.message });
+    res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
   }
 };
 

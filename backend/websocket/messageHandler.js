@@ -1,6 +1,13 @@
 const handleGameStart = (ws, rooms, data) => {
+  console.log("Starting game...");
+
   if (rooms.has(data.roomId)) {
-    ws.send("Error: game has already started!");
+    ws.send(
+      JSON.stringify({
+        type: "ERROR",
+        message: "Game has already started!",
+      })
+    );
     return;
   }
 
@@ -62,6 +69,8 @@ const handleAnswerRound = (ws, rooms, data) => {
 };
 
 const handleGameEnd = (ws, rooms, data) => {
+  console.log("Game ending...");
+
   if (!rooms.has(data.roomId)) {
     ws.send("Error: game has not started!");
     return;
@@ -83,6 +92,7 @@ const handleGameEnd = (ws, rooms, data) => {
 
 const messageHandler = (ws, rooms) => {
   function incoming(msg) {
+    console.log(`Message received: ${msg}`);
     const data = JSON.parse(msg);
 
     switch (data.type) {

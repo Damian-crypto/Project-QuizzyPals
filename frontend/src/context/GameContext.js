@@ -9,14 +9,18 @@ import React, {
 export const GameContext = createContext(null);
 
 export const gameReducer = (state, action) => {
-  switch (action.type) {
-    case "GAME_STARTED":
-      return { game: "started" };
-    case "CHECK_OUT":
-      return { game: null };
-    default:
-      return state;
-  }
+  console.log("Game reducer", action);
+  // switch (action.type) {
+  //   case "GAME_STARTED":
+  //     return { game: action.payload };
+  //   case "CHECK_OUT":
+  //     return { game: null };
+  //   case "ERROR":
+  //     return { game: null };
+  //   default:
+  //     return state;
+  // }
+  return { game: action.payload };
 };
 
 export const GameContextProvider = ({ children }) => {

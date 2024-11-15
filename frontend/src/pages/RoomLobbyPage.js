@@ -19,9 +19,7 @@ import { useGameContext } from "../hook/useGameContext";
 
 const RoomLobbyPage = () => {
   const navigate = useNavigate();
-  const { socket } = useGameContext();
-
-  console.log(socket);
+  const { socket, dispatch, game } = useGameContext();
 
   const [error, setError] = useState(null);
   const { room } = useRoomContext();
@@ -61,11 +59,39 @@ const RoomLobbyPage = () => {
       });
   };
 
+  const logError = (error) => {
+    if (error) {
+      if (error.response) {
+        if (error.response.data) {
+          if (error.response.data.message) {
+            console.log(error.response.data.message);
+            setError(error.response.data.message);
+          } else {
+            console.log(error.response.data);
+            setError(error.response.data);
+          }
+        } else {
+          console.log(error.response);
+        }
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
+  // const getRoomId = async () => {
+  //   return axios
+  //     .get(`${process.env.REACT_APP_BASE_URL}/api/users/roomid/${user.email}`)
+  //     .then((response) => {
+  //       return response.data;
+  //     });
+  // };
+
   const handleStartGameButton = async (e) => {
     const gameData = {
       userId: user.userId,
       durationHours: 0,
-      durationMinutes: 10,
+      durationMinutes: 1,
     };
 
     await axios
@@ -91,39 +117,50 @@ const RoomLobbyPage = () => {
               endTime: end,
             };
 
+            console.log(startGameRequest);
+
             socket.current.send(JSON.stringify(startGameRequest));
+            navigate("/createquiz");
+          } else if (response.data.message == "Game already running") {
             navigate("/createquiz");
           }
         }
       })
-      .catch((error) => {
-        if (error) {
-          if (error.response) {
-            if (error.response.data) {
-              if (error.response.data.message) {
-                console.log(error.response.data.message);
-                setError(error.response.data.message);
-              } else {
-                console.log(error.response.data);
-                setError(error.response.data);
-              }
-            } else {
-              console.log(error.response);
-            }
-          } else {
-            console.log(error);
-          }
+      .catch(logError);
+  };
+
+  const handleEndGameButton = async (e) => {
+    await axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/api/game/endgame/${user.userId}`,
+        requestHeaders
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          const endGameRequest = {
+            type: "GAME_END",
+            host: user.userId,
+            roomId: room.roomId,
+          };
+
+          socket.current.send(JSON.stringify(endGameRequest));
+          navigate("/");
         }
-      });
+      })
+      .catch(logError);
   };
 
   useEffect(() => {
-    if (!socket) return;
+    console.log(socket);
+    if (socket == null) return;
 
     socket.current.onmessage = (msg) => {
+      const data = JSON.parse(msg.data);
+      dispatch({ type: data.type, payload: data });
+      console.log(game);
       console.log("Received", msg);
     };
-  });
+  }, []);
 
   useEffect(() => {
     if (!room) {
@@ -145,6 +182,16 @@ const RoomLobbyPage = () => {
               onClick={handleStartGameButton}
             />
           </div>
+          {room.host === user.email ? (
+            <div className="end-btn">
+              <ButtonComponent
+                label={"End Game"}
+                onClick={handleEndGameButton}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
           {error && <div className="error-message">{error}</div>}
         </div>
       </Grid>
