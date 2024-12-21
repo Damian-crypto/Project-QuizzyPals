@@ -84,6 +84,20 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const resetPassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  try {
+    const updatedUser = await User.reset_password(email, newPassword);
+
+    res.status(StatusCodes.OK).json(updatedUser);
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: err.message });
+  }
+};
+
 const getUserRoomId = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.params.email });
@@ -106,4 +120,5 @@ module.exports = {
   updateUser,
   deleteUser,
   getUserRoomId,
+  resetPassword,
 };
