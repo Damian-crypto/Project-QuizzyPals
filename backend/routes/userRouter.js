@@ -8,6 +8,7 @@ const {
   deleteUser,
   signUp,
   getUserRoomId,
+  resetPassword,
 } = require("../controllers/userController");
 
 // Sign in user
@@ -26,5 +27,7 @@ router.delete("/:email", deleteUser);
 router.get("/roomid/:email", getUserRoomId);
 
 router.get("/", getUserRoomId);
+
+router.post("/reset-password/", resetPassword);
 
 module.exports = router;
