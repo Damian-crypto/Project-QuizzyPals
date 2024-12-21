@@ -42,6 +42,7 @@ const GameQuestionRound = () => {
   const [gameTime, setGameTime] = useState(0);
   const [currentEmoji, setCurrentEmoji] = useState(null);
   const [showWaitForOthers, setShowWaitForOthers] = useState(false);
+  const [correctChoiceIndex, setCorrectChoiceIndex] = useState(0);
   const [gameStateMessage, setGameStateMessage] = useState({
     title: "Game State",
     message: "Hi!",
@@ -251,9 +252,9 @@ const GameQuestionRound = () => {
           <Button
             className="yes-no-btn"
             variant="contained"
-            onClick={handleGameStateContinueButton}
+            onClick={() => setShowWaitForOthers(false)}
           >
-            Continue
+            Ok
           </Button>
         </div>
       </Dialog>
@@ -355,6 +356,7 @@ const GameQuestionRound = () => {
                 >
                   <List className="answer-list">
                     {addedChoices.map((item, i) => {
+                      console.log(i);
                       return (
                         <ListItem key={i} className="choice-item">
                           <IconButton onClick={() => removeChoice(i)}>
@@ -374,7 +376,11 @@ const GameQuestionRound = () => {
                             style={{
                               marginLeft: 5,
                             }}
-                            onClick={(e) => setCorrectAnswer(e.target.value)}
+                            onClick={(e) => {
+                              setCorrectAnswer(e.target.value);
+                              setCorrectChoiceIndex(i);
+                            }}
+                            checked={i == correctChoiceIndex}
                             control={<Radio />}
                             label={"make this correct"}
                           />
