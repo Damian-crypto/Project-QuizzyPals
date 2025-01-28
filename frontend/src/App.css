@@ -138,3 +138,11 @@
 .inner-container-row {
   margin-top: 1vh;
 }
+
+.error-message {
+  color: red;
+  padding-top: 10px;
+  max-width: 400px; /* Limit the width */
+  overflow-x: auto; /* Use "auto" instead of "scroll" to show scrollbar only when needed */
+  white-space: nowrap; /* Prevent text from wrapping */
+}

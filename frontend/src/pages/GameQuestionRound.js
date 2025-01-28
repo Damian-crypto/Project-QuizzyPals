@@ -29,6 +29,15 @@ import { useGameContext } from "../hook/useGameContext";
 import { useEffect } from "react";
 import { RadioButtonChecked } from "@mui/icons-material";
 
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import PrintIcon from "@mui/icons-material/Print";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import HomeIcon from "@mui/icons-material/Home";
+
 const GameQuestionRound = () => {
   const { room } = useRoomContext();
   const { user } = useAuthContext();
@@ -226,6 +235,23 @@ const GameQuestionRound = () => {
     }
   }, [game]);
 
+  const actions = [
+    {
+      icon: <HomeIcon />,
+      name: "Home",
+      act: () => {
+        navigate("/");
+      },
+    },
+    {
+      icon: <ExitToAppIcon />,
+      name: "Lobby",
+      act: () => {
+        navigate("/roomlobby");
+      },
+    },
+  ];
+
   return (
     <div className="main-container">
       <div className="game-round-header">
@@ -237,6 +263,22 @@ const GameQuestionRound = () => {
           {gameTime > 0 ? <TimerComponent initialSeconds={gameTime} /> : <></>}
         </div>
       </div>
+
+      <SpeedDial
+        ariaLabel="SpeedDial basic example"
+        sx={{ position: "absolute", bottom: 16, right: 16 }}
+        icon={<SpeedDialIcon />}
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            tooltipOpen
+            onClick={action.act}
+          />
+        ))}
+      </SpeedDial>
 
       <Dialog
         onClose={() => setShowWaitForOthers(false)}

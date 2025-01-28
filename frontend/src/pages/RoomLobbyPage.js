@@ -381,11 +381,26 @@ const RoomLobbyPage = () => {
           <div className="header-container">
             <div className="header">QuizzyPals</div>
             <div className="start-btn lobbyBtnContainer">
-              <ButtonComponent
-                className={"lobbyBtn"}
-                label={"Start Game"}
-                onClick={handleStartGameButton}
-              />
+              {game ? (
+                game.type === "GAME_STARTED" ? (
+                  <ButtonComponent
+                    label={"Continue Game"}
+                    onClick={(e) => {
+                      navigate("/createquiz");
+                    }}
+                  />
+                ) : (
+                  <ButtonComponent
+                    label={"Start Game"}
+                    onClick={handleStartGameButton}
+                  />
+                )
+              ) : (
+                <ButtonComponent
+                  label={"Start Game"}
+                  onClick={handleStartGameButton}
+                />
+              )}
             </div>
             <div className="end-btn lobbyBtnContainer">
               <ButtonComponent
