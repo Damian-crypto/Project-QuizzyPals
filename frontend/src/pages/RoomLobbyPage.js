@@ -32,8 +32,8 @@ const RoomLobbyPage = () => {
   const [saveGameData, setSaveGameData] = useState(false);
   const [gameDurationSeconds, setGameDurationSeconds] = useState(0);
   const [gameAnswerDurationSeconds, setGameAnswerDurationSeconds] = useState(0);
-  const [gameDurationMinutes, setGameDurationMinutes] = useState(0);
-  const [gameDurationAnswerMinutes, setGameAnswerDurationMinutes] = useState(0);
+  const [gameDurationMinutes, setGameDurationMinutes] = useState(1);
+  const [gameDurationAnswerMinutes, setGameAnswerDurationMinutes] = useState(1);
   const roomContext = useRoomContext();
   const { room } = roomContext;
   const { user } = useAuthContext();

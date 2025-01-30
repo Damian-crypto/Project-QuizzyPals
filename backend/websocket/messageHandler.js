@@ -348,6 +348,7 @@ const handleRoomExit = (ws, rooms, data) => {
 };
 
 const handleTimeRemaining = (ws, rooms, data) => {
+  console.log(rooms);
   const roomData = rooms.get(data.roomId).data;
   const endTime = new Date(roomData.endTime);
   const now = new Date();

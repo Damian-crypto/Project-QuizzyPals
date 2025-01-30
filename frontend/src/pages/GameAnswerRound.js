@@ -29,6 +29,7 @@ import { Label } from "@mui/icons-material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HomeIcon from "@mui/icons-material/Home";
 import SpeedDialComponent from "../components/SpeedDialComponent";
+import { makeStringATitle } from "../utils/StringUtils";
 
 const GameAnswerRound = () => {
   const navigate = useNavigate();
@@ -150,7 +151,10 @@ const GameAnswerRound = () => {
         // console.log("Timer should work now!");
         setGameTime(Math.floor(game.duration / 1000));
       } else if (game.type === "GAME_ENDED") {
-        setGameStateMessage({ title: game.type, message: game.message });
+        setGameStateMessage({
+          title: makeStringATitle(game.type) + "!",
+          message: game.message,
+        });
         setGameStateMessageVisible(true);
       }
     }

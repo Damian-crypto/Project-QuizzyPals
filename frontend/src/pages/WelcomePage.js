@@ -159,7 +159,7 @@ const WelcomePage = () => {
       );
       console.log(response);
       if (response.status === 200) {
-        console.log(response);
+        // console.log(response);
         setRoomId(response.data.roomId);
       } else {
         console.log("error");
@@ -177,6 +177,12 @@ const WelcomePage = () => {
       getRoomId();
     }
   }, [user, navigate]);
+
+  useEffect(() => {
+    if (roomId) {
+      setRoomCode(roomId);
+    }
+  }, [roomId]);
 
   return (
     user && (

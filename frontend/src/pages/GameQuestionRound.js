@@ -35,6 +35,7 @@ import SpeedDialComponent from "../components/SpeedDialComponent";
 
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HomeIcon from "@mui/icons-material/Home";
+import { makeStringATitle } from "../utils/StringUtils";
 
 const GameQuestionRound = () => {
   const { room } = useRoomContext();
@@ -256,10 +257,16 @@ const GameQuestionRound = () => {
         initializeTimeRemaining();
       } else if (game.type === "ANSWER_ROUND_STARTED") {
         submitQuiz();
-        setGameStateMessage({ title: game.type, message: game.message });
+        setGameStateMessage({
+          title: makeStringATitle(game.type) + "!",
+          message: game.message,
+        });
         setGameStateMessageVisible(true);
       } else if (game.type === "GAME_ENDED") {
-        setGameStateMessage({ title: game.type, message: game.message });
+        setGameStateMessage({
+          title: makeStringATitle(game.type) + "!",
+          message: game.message,
+        });
         setGameStateMessageVisible(true);
       } else if (game.type === "TIME_REMAINING") {
         // console.log(game);
