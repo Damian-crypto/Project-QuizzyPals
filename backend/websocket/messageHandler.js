@@ -84,6 +84,7 @@ const handleGameStart = (ws, rooms, data) => {
       gameState === undefined ||
       gameState === null
     ) {
+      // For host
       if (data.userId == rooms.get(data.roomId).data.userId) {
         ws.send(
           JSON.stringify({
@@ -346,6 +347,21 @@ const handleRoomExit = (ws, rooms, data) => {
   }
 };
 
+const handleTimeRemaining = (ws, rooms, data) => {
+  const roomData = rooms.get(data.roomId).data;
+  const endTime = new Date(roomData.endTime);
+  const now = new Date();
+
+  const duration = endTime - now;
+
+  ws.send(
+    JSON.stringify({
+      type: "TIME_REMAINING",
+      duration: duration,
+    })
+  );
+};
+
 const messageHandler = (ws, rooms) => {
   function incoming(msg) {
     // console.log(`Message received: ${msg}`);
@@ -366,6 +382,10 @@ const messageHandler = (ws, rooms) => {
       }
       case "ANSWER_ROUND_START": {
         handleAnswerRound(ws, rooms, data);
+        break;
+      }
+      case "TIME_REMAINING": {
+        handleTimeRemaining(ws, rooms, data);
         break;
       }
       case "GAME_END": {

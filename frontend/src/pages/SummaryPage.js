@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import "./SummaryPage.css";
 import ButtonComponent from "../components/ButtonComponent";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,8 @@ import { useGameContext } from "../hook/useGameContext";
 import { useAuthContext } from "../hook/useAuthContext";
 import { useEffect } from "react";
 import axios from "axios";
+
+import Grid from "@mui/material/Grid2";
 
 const SummaryPage = () => {
   const { room } = useRoomContext();
@@ -154,16 +156,61 @@ const SummaryPage = () => {
 
   return (
     <div className="main-container">
-      <div className="summary-header">
+      {/* <div className="summary-header">
         <div className="summary-header-left">
           <div className="room-code">Room: {room && room.roomId}</div>
-          {/* <p>I am {user.email}</p> */}
+          <p>I am {user.email}</p>
           <div className="round-title">SUMMARY</div>
         </div>
-        {/* <div className="summary-right">
+        <div className="summary-right">
           <div className="game-timer">{room && room.gameRound}</div>
-        </div> */}
-      </div>
+        </div>
+      </div> */}
+      <Grid
+        container
+        sx={{
+          display: "flex",
+          justifyContent: { xs: "space-evenly", md: "space-between" },
+          // justifyContent: {
+          //   xs: "center",
+          //   md: "space-between",
+          // },
+          alignItems: "center",
+          paddingTop: 2,
+          paddingLeft: 10,
+          paddingRight: 10,
+        }}
+      >
+        <Grid
+          item
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "left",
+          }}
+        >
+          <Typography
+            variant="p"
+            sx={{
+              fontSize: { xs: "24px", md: "36px" },
+              textAlign: { xs: "center", md: "left" },
+            }}
+          >
+            Room: {room.roomId}
+          </Typography>
+          <Typography
+            variant="p"
+            sx={{
+              fontSize: { xs: "28px", md: "48px" },
+              fontWeight: "bold",
+              textAlign: { xs: "center", md: "left" },
+            }}
+          >
+            Question Round
+          </Typography>
+        </Grid>
+      </Grid>
+
       {currentQuestion ? (
         <div className="questions-main-container">
           <div className="prev-btn prevStart-btns" onClick={handlePrev}>
@@ -217,27 +264,43 @@ const SummaryPage = () => {
             </div>
           ) : (
             <div>
-              <h1
-                style={{
+              <Grid
+                container
+                sx={{
                   display: "flex",
-                  alignItems: "center",
                   justifyContent: "center",
+                  alignItems: "center",
+                  gap: { xs: 0, md: 5 },
+                  paddingTop: 2,
+                  paddingBottom: 5,
                 }}
               >
-                Seems like you don't have any questions and answers{" "}
-                <picture>
-                  <source
-                    srcSet="https://fonts.gstatic.com/s/e/notoemoji/latest/1f914/512.webp"
-                    type="image/webp"
-                  ></source>
-                  <img
-                    src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f914/512.gif"
-                    alt="🤔"
-                    width="128"
-                    height="128"
-                  ></img>
-                </picture>
-              </h1>
+                {/* <div> */}
+                <Grid item>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: 32, md: 36 },
+                    }}
+                  >
+                    Seems like you don't have any questions and answers{" "}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <picture>
+                    <source
+                      srcSet="https://fonts.gstatic.com/s/e/notoemoji/latest/1f914/512.webp"
+                      type="image/webp"
+                    ></source>
+                    <img
+                      src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f914/512.gif"
+                      alt="🤔"
+                      width="128"
+                      height="128"
+                    ></img>
+                  </picture>
+                </Grid>
+                {/* </div> */}
+              </Grid>
               <ButtonComponent label={"Continue"} onClick={handleDoneBtn} />
             </div>
           )}

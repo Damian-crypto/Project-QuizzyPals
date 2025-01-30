@@ -195,7 +195,13 @@ const WelcomePage = () => {
           width: "100vw",
         }}
       >
-        <Grid item>
+        <Grid
+          item
+          sx={{
+            paddingTop: 20,
+            paddingBottom: 20,
+          }}
+        >
           <div className="header-container">
             <div className="header">QuizzyPals</div>
           </div>

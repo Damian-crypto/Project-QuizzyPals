@@ -14,8 +14,10 @@ import {
   FormLabel,
   Radio,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
+import Grid from "@mui/material/Grid2";
 import { resolvePath, useNavigate } from "react-router-dom";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircleOutlined";
 import "./GameQuestionRound.css";
@@ -29,12 +31,8 @@ import { useGameContext } from "../hook/useGameContext";
 import { useEffect } from "react";
 import { RadioButtonChecked } from "@mui/icons-material";
 
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import PrintIcon from "@mui/icons-material/Print";
+import SpeedDialComponent from "../components/SpeedDialComponent";
+
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HomeIcon from "@mui/icons-material/Home";
 
@@ -117,6 +115,35 @@ const GameQuestionRound = () => {
         }
       })
       .catch(logError);
+  };
+
+  const initializeTimeRemaining = async () => {
+    const gameData = {
+      userId: user.userId,
+      roomId: room.roomId,
+    };
+
+    const timeRequest = {
+      type: "TIME_REMAINING",
+      ...gameData,
+    };
+
+    socket.current.send(JSON.stringify(timeRequest));
+    // console.log(game.duration / 1000);
+    // setGameTime(Math.floor(game.duration / 1000));
+    // console.log("fetching time...");
+    // await axios
+    //   .get(
+    //     `${process.env.REACT_APP_BASE_URL}/api/game/remainingtime/${user.userId}`,
+    //     requestHeaders
+    //   )
+    //   .then((response) => {
+    //     if (response.status === 200) {
+    //       console.log(response.data);
+    //       setGameTime(Math.floor(response.data["remainingTime"] / 1000));
+    //     }
+    //   })
+    //   .catch(logError);
   };
 
   const handleDoneClick = async (e) => {
@@ -214,8 +241,11 @@ const GameQuestionRound = () => {
 
   useEffect(() => {
     if (game) {
+      initializeTimeRemaining();
       if (game.type === "ANSWER_ROUND_STARTED") {
         navigate("/answers");
+      } else if (game.type === "TIME_REMAINING") {
+        // console.log(game);
       }
     }
   }, []);
@@ -223,7 +253,7 @@ const GameQuestionRound = () => {
   useEffect(() => {
     if (game) {
       if (game.type === "GAME_STARTED") {
-        setGameTime(Math.floor(game.duration / 1000));
+        initializeTimeRemaining();
       } else if (game.type === "ANSWER_ROUND_STARTED") {
         submitQuiz();
         setGameStateMessage({ title: game.type, message: game.message });
@@ -231,6 +261,9 @@ const GameQuestionRound = () => {
       } else if (game.type === "GAME_ENDED") {
         setGameStateMessage({ title: game.type, message: game.message });
         setGameStateMessageVisible(true);
+      } else if (game.type === "TIME_REMAINING") {
+        // console.log(game);
+        setGameTime(Math.floor(game.duration / 1000));
       }
     }
   }, [game]);
@@ -254,31 +287,68 @@ const GameQuestionRound = () => {
 
   return (
     <div className="main-container">
-      <div className="game-round-header">
-        <div className="game-round-header-left">
-          <div className="room-code">Room: {room.roomId}</div>
-          <div className="round-title">Question Round</div>
-        </div>
-        <div className="game-round-header-right">
-          {gameTime > 0 ? <TimerComponent initialSeconds={gameTime} /> : <></>}
-        </div>
+      {/* <div className="game-round-header"> */}
+      <div>
+        {/* <div className="game-round-header-left"> */}
+        {/* <div className="room-code">Room: {room.roomId}</div> */}
+        <Grid
+          container
+          sx={{
+            display: "flex",
+            justifyContent: { xs: "space-evenly", md: "space-between" },
+            // justifyContent: {
+            //   xs: "center",
+            //   md: "space-between",
+            // },
+            alignItems: "center",
+            paddingTop: 2,
+            paddingLeft: 10,
+            paddingRight: 10,
+          }}
+        >
+          <Grid
+            item
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              textAlign: "left",
+            }}
+          >
+            <Typography
+              variant="p"
+              sx={{
+                fontSize: { xs: "24px", md: "36px" },
+                textAlign: { xs: "center", md: "left" },
+              }}
+            >
+              Room: {room.roomId}
+            </Typography>
+            <Typography
+              variant="p"
+              sx={{
+                fontSize: { xs: "28px", md: "48px" },
+                fontWeight: "bold",
+                textAlign: { xs: "center", md: "left" },
+              }}
+            >
+              Question Round
+            </Typography>
+          </Grid>
+          <Grid item>
+            {/* <div className="game-round-header-right"> */}
+            {gameTime > 0 ? (
+              <TimerComponent initialSeconds={gameTime} />
+            ) : (
+              <></>
+            )}
+            {/* </div> */}
+          </Grid>
+        </Grid>
+        {/* <div className="round-title">Question Round</div> */}
+        {/* </div> */}
       </div>
 
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-            tooltipOpen
-            onClick={action.act}
-          />
-        ))}
-      </SpeedDial>
+      <SpeedDialComponent actions={actions} />
 
       <Dialog
         onClose={() => setShowWaitForOthers(false)}
@@ -349,18 +419,23 @@ const GameQuestionRound = () => {
       </Dialog>
       <div className="questions-main-container">
         <div className="question-outer-container">
-          <div className="topic-label">
+          {/* <div className="topic-label"> */}
+          <Typography>
             Write a question to ask from your friends & wait for duration ends
-          </div>
+          </Typography>
+          {/* </div> */}
           <div className="question-inner-container">
             <div className="inner-container-row question-text">
               <TextField
-                className="question-field"
+                // className="question-field"
                 label="Enter your question here"
                 variant="outlined"
                 value={quizQuestion}
                 onChange={(e) => setQuizQuestion(e.target.value)}
                 onBlur={handleQuizQuestionSentiment}
+                sx={{
+                  width: "100%",
+                }}
               />
               <div className="emoji-reaction">
                 {currentEmoji ? (

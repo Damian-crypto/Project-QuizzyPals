@@ -26,6 +26,10 @@ import { useRoomContext } from "../hook/useRoomContext";
 import { useGameContext } from "../hook/useGameContext";
 import { Label } from "@mui/icons-material";
 
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import HomeIcon from "@mui/icons-material/Home";
+import SpeedDialComponent from "../components/SpeedDialComponent";
+
 const GameAnswerRound = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
@@ -163,6 +167,23 @@ const GameAnswerRound = () => {
     getAndSetQuestions();
   }, []);
 
+  const actions = [
+    {
+      icon: <HomeIcon />,
+      name: "Home",
+      act: () => {
+        navigate("/");
+      },
+    },
+    {
+      icon: <ExitToAppIcon />,
+      name: "Lobby",
+      act: () => {
+        navigate("/roomlobby");
+      },
+    },
+  ];
+
   return (
     <div className="main-container answers-main">
       <Dialog
@@ -183,6 +204,9 @@ const GameAnswerRound = () => {
           </Button>
         </div>
       </Dialog>
+
+      <SpeedDialComponent actions={actions} />
+
       <div className="game-round-header">
         <div className="game-round-header-left">
           <div className="room-code">Room: {room && room.roomId}</div>

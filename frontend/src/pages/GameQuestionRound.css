@@ -83,7 +83,7 @@
 
 .lobby-btn {
   width: 10% !important;
-  position: fixed;
+  /* position: fixed; */
 }
 
 .choices-list {

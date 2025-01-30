@@ -397,7 +397,7 @@ const getTimeRemaining = async (req, res) => {
     const endTime = room.gameEnd;
     const duration = endTime - startTime;
 
-    res.status(StatusCodes.OK).json({ remainingTime: `${duration / 1000}s` });
+    res.status(StatusCodes.OK).json({ remainingTime: duration });
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

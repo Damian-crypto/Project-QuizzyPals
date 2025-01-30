@@ -382,7 +382,8 @@ const RoomLobbyPage = () => {
             <div className="header">QuizzyPals</div>
             <div className="start-btn lobbyBtnContainer">
               {game ? (
-                game.type === "GAME_STARTED" ? (
+                game.type === "GAME_STARTED" ||
+                game.type === "TIME_REMAINING" ? (
                   <ButtonComponent
                     label={"Continue Game"}
                     onClick={(e) => {
