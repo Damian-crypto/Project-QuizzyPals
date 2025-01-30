@@ -158,7 +158,6 @@ const RoomLobbyPage = () => {
       )
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data);
           if (response.data.message === "Game started") {
             const tmpGameData = gameData;
             const startGameRequest = {
@@ -175,6 +174,8 @@ const RoomLobbyPage = () => {
               payload: response.data.room,
             });
             navigate("/createquiz");
+          } else {
+            alert(response.data?.message);
           }
         }
       })
@@ -246,7 +247,7 @@ const RoomLobbyPage = () => {
             endGameRequest.type = "EXIT_ROOM";
             socket.current.send(JSON.stringify(endGameRequest));
             endGameRequest.type = "GAME_END";
-            navigate("/");
+            navigate("/welcome");
           }
         })
         .catch(logError);
@@ -260,7 +261,7 @@ const RoomLobbyPage = () => {
         .then((response) => {
           if (response.status === 200) {
             socket.current.send(JSON.stringify(endGameRequest));
-            navigate("/");
+            navigate("/welcome");
           }
         })
         .catch(logError);
@@ -275,7 +276,7 @@ const RoomLobbyPage = () => {
       )
       .then((response) => {
         if (response.status === 200) {
-          navigate("/");
+          navigate("/welcome");
         }
       })
       .catch(logError);
@@ -435,8 +436,7 @@ const RoomLobbyPage = () => {
           item
           sx={{
             width: 2,
-            position: "fixed",
-            height: { xs: "0", sm: "0", md: "100%", lg: "100%" },
+            height: { xs: "0", sm: "0", md: "100vh", lg: "100vh" },
             backgroundColor: "#ccc",
           }}
         ></Grid>
@@ -457,7 +457,7 @@ const RoomLobbyPage = () => {
                   {playersInRoom.map((item, index) => {
                     let name = item;
                     if (item === room.host) {
-                      name += " (Host)";
+                      name = name + " (Host)";
                     }
                     if (item === user.email) {
                       name += " (Me)";

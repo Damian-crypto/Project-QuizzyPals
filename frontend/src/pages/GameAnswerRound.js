@@ -176,7 +176,7 @@ const GameAnswerRound = () => {
       icon: <HomeIcon />,
       name: "Home",
       act: () => {
-        navigate("/");
+        navigate("/welcome");
       },
     },
     {
